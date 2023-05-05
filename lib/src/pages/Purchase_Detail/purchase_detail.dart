@@ -2,7 +2,9 @@ import 'package:eshop_ticket/src/pages/Ticket_HelpCenter/ticket_helpcenter.dart'
 import 'package:flutter/material.dart';
 
 class PurchaseDetail extends StatefulWidget {
-  const PurchaseDetail({super.key});
+  final dynamic product;
+
+  const PurchaseDetail({super.key, required this.product});
 
   @override
   State<PurchaseDetail> createState() => _PurchaseDetailState();
@@ -40,16 +42,16 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SizedBox(height: 4),
+                  children: [
+                    const SizedBox(height: 4),
                     Text(
-                      "Notebook Inspiron 15 5000",
-                      style: TextStyle(
+                      widget.product["name"],
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text("R\$4999,00"),
+                    const SizedBox(height: 8),
+                    Text(widget.product["price"]),
                   ],
                 )
               ],
@@ -65,7 +67,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                     ),
                   ),
                   TextSpan(
-                    text: "665436549",
+                    text: widget.product["numberPedido"],
                     style: TextStyle(
                       color: Colors.black.withOpacity(1),
                       decoration: TextDecoration.underline,
@@ -85,7 +87,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                     ),
                   ),
                   TextSpan(
-                    text: "Em andamento",
+                    text: widget.product["status"],
                     style: TextStyle(
                       color: Colors.black.withOpacity(1),
                       decoration: TextDecoration.underline,
@@ -111,8 +113,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TicketHelpCenter(
+                      builder: (context) => TicketHelpCenter(
                         subject: 'Recebi o produto com um problema',
+                        product: widget.product,
                       ),
                     ),
                   );
@@ -130,8 +133,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TicketHelpCenter(
+                      builder: (context) => TicketHelpCenter(
                         subject: 'Recebi o pacote sem o produto',
+                        product: widget.product,
                       ),
                     ),
                   );
@@ -149,8 +153,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TicketHelpCenter(
+                      builder: (context) => TicketHelpCenter(
                         subject: 'Tive um problema com o motorista',
+                        product: widget.product,
                       ),
                     ),
                   );
@@ -168,8 +173,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TicketHelpCenter(
+                      builder: (context) => TicketHelpCenter(
                         subject: 'Quero devolver o produto',
+                        product: widget.product,
                       ),
                     ),
                   );
@@ -187,8 +193,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TicketHelpCenter(
+                      builder: (context) => TicketHelpCenter(
                         subject: 'Quero trocar o endereço da compra',
+                        product: widget.product,
                       ),
                     ),
                   );
@@ -206,8 +213,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TicketHelpCenter(
+                      builder: (context) => TicketHelpCenter(
                         subject: 'Outro',
+                        product: widget.product,
                       ),
                     ),
                   );
@@ -222,30 +230,17 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                 backgroundColor: const Color.fromRGBO(18, 217, 227, 0.4),
                 minimumSize: const Size.fromHeight(50),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const PurchaseDetail()),
-                );
-              },
+              onPressed: null,
               child: const Text('Falar com um atendente'),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                side: const BorderSide(color: Color(0xFF12D9E3)),
                 backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
                 minimumSize: const Size.fromHeight(50),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const PurchaseDetail()),
-                );
-              },
+              onPressed: null,
               child: const Text('Detalhe da compra'),
             )
           ],

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:convert' as convert;
 import 'package:flutter/cupertino.dart';
@@ -181,14 +182,19 @@ class _TicketHelpCenterState extends State<TicketHelpCenter> {
         body: convert.jsonEncode(body),
       );
 
+      final decodeResponse = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        fetchImage("2cee0319-e917-4ccf-aca2-836aeef24fa3");
-        // ignore: use_build_context_synchronously
-        _showAlertDialog(
-          context,
-          "Sucesso",
-          "Reclamação salva com sucesso!",
-        );
+        if (_imageFileList![0].path.isNotEmpty) {
+          fetchImage(decodeResponse["codigoReclamacao"]);
+        } else {
+          // ignore: use_build_context_synchronously
+          _showAlertDialog(
+            context,
+            "Sucesso",
+            "Reclamação salva com sucesso!",
+          );
+        }
       } else {
         // ignore: use_build_context_synchronously
         _showAlertDialog(
@@ -220,7 +226,7 @@ class _TicketHelpCenterState extends State<TicketHelpCenter> {
         _showAlertDialog(
           context,
           "Sucesso",
-          "Imagem salva com sucesso!",
+          "Reclamação salva com sucesso!",
         );
       } else {
         // ignore: use_build_context_synchronously

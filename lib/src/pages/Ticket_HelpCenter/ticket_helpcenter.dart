@@ -114,6 +114,9 @@ class _TicketHelpCenterState extends State<TicketHelpCenter> {
               child: const Text('Anexar imagem do produto'),
             ),
             const SizedBox(height: 24),
+            Container(
+              child: _previewImages(),
+            ),
             const Spacer(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -139,17 +142,6 @@ class _TicketHelpCenterState extends State<TicketHelpCenter> {
     }
     if (_imageFileList != null) {
       return Image.file(File(_imageFileList![0].path));
-      // return GridView.builder(
-      //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      //       crossAxisCount: 3,
-      //       crossAxisSpacing: 1,
-      //       mainAxisSpacing: 16,
-      //       childAspectRatio: 2,
-      //     ),
-      //     itemCount: _imageFileList!.length,
-      //     itemBuilder: (context, index) {
-      //       return Image.file(File(_imageFileList![index].path));
-      //     });
     } else if (_pickImageError != null) {
       return Text(
         'Ocorreu um erro ao anexar as imagens: $_pickImageError',
@@ -157,7 +149,7 @@ class _TicketHelpCenterState extends State<TicketHelpCenter> {
       );
     } else {
       return const Text(
-        'Você pode anexar até 5 imagens do produto.',
+        'Você não anexou nenhuma imagem.',
         textAlign: TextAlign.center,
       );
     }
@@ -190,6 +182,7 @@ class _TicketHelpCenterState extends State<TicketHelpCenter> {
       );
 
       if (response.statusCode == 200) {
+        fetchImage("2cee0319-e917-4ccf-aca2-836aeef24fa3");
         // ignore: use_build_context_synchronously
         _showAlertDialog(
           context,
@@ -209,6 +202,39 @@ class _TicketHelpCenterState extends State<TicketHelpCenter> {
         context,
         "Erro",
         "Houve um erro ao cadastrar a reclamação",
+      );
+    }
+  }
+
+  Future<void> fetchImage(String codeTicket) async {
+    try {
+      final uri = Uri.parse(
+          "https://api-cqrs-command.herokuapp.com/api-cqrs-command/v1/command/reclamacoes/$codeTicket/imagens");
+      final request = http.MultipartRequest('POST', uri);
+      request.files.add(await http.MultipartFile.fromPath(
+          'imagens', _imageFileList![0].path));
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        _showAlertDialog(
+          context,
+          "Sucesso",
+          "Imagem salva com sucesso!",
+        );
+      } else {
+        // ignore: use_build_context_synchronously
+        _showAlertDialog(
+          context,
+          "Erro",
+          "Não conseguimos enviar a imagem",
+        );
+      }
+    } catch (e) {
+      _showAlertDialog(
+        context,
+        "Erro",
+        "Houve um erro ao cadastrar a imagem",
       );
     }
   }
